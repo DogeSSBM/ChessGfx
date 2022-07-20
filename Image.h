@@ -17,6 +17,12 @@ void img_init(void)
 	atexit(img_quit);
 }
 
+void freeImg(Img *image)
+{
+	if(image != NULL)
+		SDL_FreeSurface(image);
+}
+
 Img* loadImg(const char *imgFile)
 {
 	Img *surface = IMG_Load(imgFile);
@@ -28,10 +34,12 @@ Img* loadImg(const char *imgFile)
 	return surface;
 }
 
-void freeImg(Img *image)
+SDL_Texture* loadTexture(const char *imgFile)
 {
-	if(image != NULL)
-		SDL_FreeSurface(image);
+    Img *img = IMG_Load(imgFile);
+    SDL_Texture *t = SDL_CreateTextureFromSurface(gfx.renderer, img);
+    SDL_FreeSurface(img);
+    return t;
 }
 
 void drawImg(Img *image)

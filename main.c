@@ -7,12 +7,14 @@ typedef enum{C_EMPTY, C_WHITE, C_BLACK}pColor;
 typedef struct{
     pColor color;
     pType type;
+
 }Piece;
 
 typedef struct{
     Color whiteSquare;
     Color blackSquare;
     uint scale;
+    SDL_Texture *pieces;
     Piece arr[8][8];
 }Board;
 
@@ -27,6 +29,7 @@ Board bNew(void)
         .whiteSquare = (const Color){.r=0xb9, .g=0xb9, .b=0xb9, .a=0xff},
         .blackSquare = (const Color){.r=0x3b, .g=0x3b, .b=0x3b, .a=0xff},
         .scale = bRescale(),
+        .pieces = loadTexture("./Pieces/pieces.jpg"),
         .arr = {0}
     };
     const pType home[8] = {T_ROOK, T_KNIGHT, T_BISHOP, T_QUEEN, T_KING, T_BISHOP, T_KNIGHT, T_ROOK};
@@ -41,7 +44,7 @@ Board bNew(void)
     return ret;
 }
 
-const char* pUtf(const Piece p)
+const char* pStr(const Piece p)
 {
     static const char b[8][8] = {" ", "♕", "♔", "♘", "♗", "♖", "♙"};
     static const char w[8][8] = {" ", "♛", "♚", "♝", "♞", "♜", "♟"};
@@ -58,28 +61,43 @@ Piece pAt(const Board board, const Coord pos)
     return board.arr[pos.x][pos.y];
 }
 
-// void bDraw(const Board board)
-// {
-//     setColor(board.whiteSquare);
-//     fillSquareCoord(iC(0,0), board.scale*8);
-//     for(uint y = 0; y < 8; y++){
-//         for(uint x = 0; x < 8; x++){
-//             const Coord bpos = iC(x,y);
-//             const Coord wpos = coordMul(bpos, board.scale);
-//             if((x+y)&1){
-//                 setColor(board.blackSquare);
-//                 fillSquareCoord(wpos, board.scale);
-//             }
-//
-//             const Piece p = pAt(board, bpos);
-//             if(p.type != T_EMPTY){
-//                 setTextSize(board.scale);
-//                 setTextColor(p.color == C_BLACK ? BLACK : WHITE);
-//                 drawUtfCoord(pUtf(p), wpos);
-//             }
-//         }
-//     }
-// }
+void bPrint(const Board board)
+{
+    for(uint y = 0; y < 8; y++){
+        printf("+---+---+---+---+---+---+---+---+\n|");
+        for(uint x = 0; x < 8; x++){
+            printf(" %s |", pStr(pAt(board, iC(x,y))));
+        }
+        printf("\n");
+    }
+    printf("+---+---+---+---+---+---+---+---+\n");
+}
+
+void bDraw(const Board board)
+{
+    setColor(board.whiteSquare);
+    fillSquareCoord(iC(0,0), board.scale*8);
+    for(uint y = 0; y < 8; y++){
+        for(uint x = 0; x < 8; x++){
+            const Coord bpos = iC(x,y);
+            const Coord wpos = coordMul(bpos, board.scale);
+            if((x+y)&1){
+                setColor(board.blackSquare);
+                fillSquareCoord(wpos, board.scale);
+            }
+
+            const Piece p = pAt(board, bpos);
+            if(p.type != T_EMPTY){
+                SDL_RenderCopy(
+                    gfx.renderer,
+                    board.pieces,
+                    &((const Rect){.x = 64*(p.type-1), p.color == C_WHITE ? 64 : 0, .w = 64, .h = 64}),
+                    &((const Rect){.x = wpos.x, .y = wpos.y, .w = board.scale, .h = board.scale})
+                );
+            }
+        }
+    }
+}
 
 int main(int argc, char const *argv[])
 {
@@ -90,6 +108,7 @@ int main(int argc, char const *argv[])
 
     printf("♕ ♔ ♘ ♗ ♖ ♙\n");
     Board board = bNew();
+    bPrint(board);
 
     while(1){
         const uint t = frameStart();
@@ -98,10 +117,7 @@ int main(int argc, char const *argv[])
             return 0;
 
         board.scale = bRescale();
-        //bDraw(board);
-        setTextSize(board.scale);
-        setTextColor(PINK);
-        drawUtfCoord(L"♕ ♔ ♘ ♗ ♖ ♙", getWindowMid());
+        bDraw(board);
 
         frameEnd(t);
     }
