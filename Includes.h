@@ -5,12 +5,13 @@
 #include <ctype.h>
 #include <limits.h>
 #include <string.h>
+#include <locale.h>
 #include <stdio.h>
 #include <time.h>
 #include <complex.h>
 #include <math.h>
 #include <tgmath.h>
-
+#include <uchar.h>
 #include <SDL2/SDL.h>
 #include <SDL2/SDL_ttf.h>
 #include <SDL2/SDL2_gfxPrimitives.h>

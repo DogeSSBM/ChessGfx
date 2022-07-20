@@ -37,6 +37,19 @@ Coord drawTextCoord(const char *text, const Coord pos)
 	return (const Coord){pos.x+r.w, pos.y};
 }
 
+Coord drawUtfCoord(const wchar_t *text, const Coord pos)
+{
+	Rect r;
+	r.x = pos.x; r.y = pos.y;
+	SDL_Surface *surface = TTF_RenderUNICODE_Solid(gfx.font, (const Uint16*)text, gfx.fontColor);
+	SDL_Texture *texture = SDL_CreateTextureFromSurface(gfx.renderer, surface);
+	SDL_QueryTexture(texture, NULL, NULL, &r.w, &r.h);
+	SDL_RenderCopy(gfx.renderer, texture, NULL, &r);
+	SDL_FreeSurface(surface);
+	SDL_DestroyTexture(texture);
+	return (const Coord){pos.x+r.w, pos.y};
+}
+
 void drawTextCentered(const char *text, const int x, const int y)
 {
 	Rect r;
