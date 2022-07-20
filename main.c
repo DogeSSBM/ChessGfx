@@ -1,4 +1,5 @@
 #include "Includes.h"
+#include "Chess.h"
 
 typedef enum{T_EMPTY, T_KING, T_QUEEN, T_KNIGHT, T_BISHOP, T_ROOK, T_PAWN}pType;
 typedef enum{C_EMPTY, C_WHITE, C_BLACK}pColor;
@@ -36,6 +37,28 @@ Board bNew(void)
     return ret;
 }
 
+Piece pAt(const Board board, const Coord pos)
+{
+    if(coordMin(pos) < 0 || coordMax(pos) > 7)
+        panic("Cannot get piece at coord {%i,%i}\n", pos.x, pos.y);
+    return board.arr[pos.x][pos.y];
+}
+
+void bDraw(const Board board)
+{
+    setColor(GREY3);
+    fillSquareCoord(iC(0,0), board.scale)
+    for(uint y = 0; y < 8; y++){
+        for(uint x = 0; x < 8; x++){
+            const Coord bpos = iC(x,y);
+            const Piece p = pAt(board, bpos);
+            if(p.type != T_EMPTY){
+
+            }
+        }
+    }
+}
+
 int main(int argc, char const *argv[])
 {
     Length window = {.x = 800, .y = 600};
@@ -45,16 +68,10 @@ int main(int argc, char const *argv[])
     Board board = bNew();
 
     while(1){
-       const uint t = frameStart();
+        const uint t = frameStart();
 
-        if(mouseBtnState(MOUSE_L)){
-            drawTextCenteredCoord("Left clicked", mouse.pos);
-        }
-
-        for(Direction i = DIR_U; i <= DIR_L; i++)
-            pos = coordShift(pos, i, 8*keyState(dirKey[i]));
-
-        fillCircleCoord(pos, 32);
+        if((keyHeld(SDL_SCANCODE_RCTRL) || keyHeld(SDL_SCANCODE_LCTRL)) && keyPressed(SDL_SCANCODE_Q))
+            return 0;
 
         frameEnd(t);
     }
