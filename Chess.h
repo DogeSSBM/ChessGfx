@@ -1,8 +1,8 @@
 #ifndef CHESS_H
 #define CHESS_H
 
-#include "ChessTypes.h";
-#include "Decls.h";
+#include "ChessTypes.h"
+#include "Decls.h"
 #include "Panic.h"
 #include "Piece.h"
 #include "Board.h"

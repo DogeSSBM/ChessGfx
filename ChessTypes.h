@@ -22,10 +22,12 @@ typedef enum{M_MOVE, M_CAPTURE, M_CASTLE, M_PROMOTE, M_P_CHARGE, M_P_PASSANT}mTy
 
 typedef struct Turn{
     mType type;
+    pColor color;
     union{
         struct{
             Coord src;
             Coord dst;
+            Piece moved;
         }move;
         struct{
             Coord src;
@@ -33,13 +35,31 @@ typedef struct Turn{
             Piece captured;
         }capture;
         struct{
-            Coord rook;
-            Coord king;
+            struct{
+                Coord src;
+                Coord dst;
+            }rook;
+            struct{
+                Coord src;
+                Coord dst;
+            }king;
         }castle;
         struct{
-            Coord
-        }
-    }
+            Coord src;
+            Coord dst;
+            Piece before;
+            Piece promoted;
+        }promote;
+        struct{
+            Coord src;
+            Coord dst;
+        }charge;
+        struct{
+            Coord src;
+            Coord dst;
+            Coord captured;
+        }passant;
+    };
     struct Turn *next;
 }Turn;
 

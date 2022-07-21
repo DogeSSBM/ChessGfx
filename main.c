@@ -1,4 +1,4 @@
-#include "Includes.h"
+#include "./DogeLib/Includes.h"
 #include "Chess.h"
 
 int main(int argc, char const *argv[])

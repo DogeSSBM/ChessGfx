@@ -185,7 +185,7 @@ void setTextSize(const uint size)
 	if(gfx.font != NULL)
 		TTF_CloseFont(gfx.font);
 	gfx.fontSize = size;
-	gfx.font = TTF_OpenFont("./FiraCode.ttf", gfx.fontSize);
+	gfx.font = TTF_OpenFont("./DogeLib/FiraCode.ttf", gfx.fontSize);
 }
 
 int getTextSize(void)
