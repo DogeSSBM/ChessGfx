@@ -22,4 +22,14 @@ Turn *tAppend(Turn *const head, Turn *const tail)
     return head;
 }
 
+Turn *tLast(Turn *const head)
+{
+    if(!head)
+        return NULL;
+    Turn *cur = head;
+    while(cur->next)
+        cur = cur->next;
+    return cur;
+}
+
 #endif /* end of include guard: TURN_H */
