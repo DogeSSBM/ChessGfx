@@ -4,6 +4,12 @@
 typedef enum{T_EMPTY, T_KING, T_QUEEN, T_KNIGHT, T_BISHOP, T_ROOK, T_PAWN}pType;
 typedef enum{C_EMPTY, C_WHITE, C_BLACK}pColor;
 
+pColor cInv(const pColor color){
+    if(color == C_EMPTY)
+        return color
+    return color == C_WHITE ? C_BLACK : C_WHITE;
+}
+
 typedef struct{
     pColor color;
     pType type;
@@ -17,6 +23,11 @@ typedef struct{
     SDL_Texture *pieces;
     Piece arr[8][8];
 }Board;
+
+typedef struct{
+    Coord src;
+    Coord dst;
+}Move;
 
 typedef enum{M_MOVE, M_CAPTURE, M_CASTLE, M_PROMOTE, M_P_CHARGE, M_P_PASSANT}mType;
 
