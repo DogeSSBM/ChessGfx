@@ -30,7 +30,7 @@ int main(int argc, char **argv)
         if(mouseBtnChanged(MOUSE_L))
             active = aMbtn(board, active);
 
-
+        aHighlight(board, active);
 
         if(active.msrc.valid && active.mdst.valid){
             Turn *t = tNew(active.color);
