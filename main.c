@@ -45,34 +45,7 @@ int main(int argc, char **argv)
             downAt = (const mCoord){0};
         }
 
-        if(active.mbpos.valid){
-            if(pAt(board, active.mbpos.pos).color == active.color){
-                setColor(cColor[cInv(active.color)]);
-                fillBorderCoordSquare(
-                    coordMul(active.mbpos.pos, board.scale),
-                    board.scale,
-                    -8
-                );
-                setColor(cColor[active.color]);
-                fillBorderCoordSquare(
-                    coordOffset(coordMul(active.mbpos.pos, board.scale),(const Coord){2,2}),
-                    board.scale - 4,
-                    -4
-                );
-            }else{
-                setColor(GREY);
-                fillBorderCoordSquare(
-                    coordMul(active.mbpos.pos, board.scale),
-                    board.scale,
-                    -8
-                );
-            }
-        }
-
-        if(active.msrc.valid){
-            setColor(GREEN);
-            fillBorderCoordSquare(coordMul(active.msrc.pos, board.scale), board.scale, -8);
-        }
+        
 
         if(active.msrc.valid && active.mdst.valid){
             Turn *t = tNew(active.color);
