@@ -3,7 +3,7 @@
 
 int main(int argc, char **argv)
 {
-    Length window = {.x = 900, .y = 900};
+    Length window = {.x = 800, .y = 800};
     init();
     setWindowLen(window);
 
@@ -12,6 +12,13 @@ int main(int argc, char **argv)
 
     Turn *turns = NULL;
 
+    int a = 0;
+    int b = aInv(a);
+    for(int i = 0; i < 16; i++){
+        printf("%s\t%s\n", AngStr[a], AngStr[b]);
+        a = aRoi(a, 3);
+        b = aRoi(b, -3);
+    }
 
     ActivePlayer active = {.color = C_WHITE};
     while(1){

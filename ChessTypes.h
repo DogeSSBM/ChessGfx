@@ -27,6 +27,18 @@ typedef struct{
     };
 }mCoord;
 
+//            000   001   010   011   100   101   110   111
+typedef enum{A_UU, A_UR, A_RR, A_DR, A_DD, A_DL, A_LL, A_UL, A_END}Ang;
+const char *const AngStr[8] = {"A_UU", "A_UR", "A_RR", "A_DR", "A_DD", "A_DL", "A_LL", "A_UL"};
+Ang aInv(const Ang a)
+{
+    return a^0b100;
+}
+
+Ang aRoi(const Ang a, const int i){
+    return a+i < 0 ? A_END - (iabs(i)%A_END) : (a+i)%A_END;
+}
+
 typedef enum{T_EMPTY, T_KING, T_QUEEN, T_KNIGHT, T_BISHOP, T_ROOK, T_PAWN}pType;
 typedef enum{C_EMPTY, C_WHITE, C_BLACK}pColor;
 const Color cColor[3] = {(const Color){0}, WHITE, BLACK};

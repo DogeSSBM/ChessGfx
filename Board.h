@@ -108,4 +108,6 @@ bBoard bbPieces(const Board board)
     return bbInv(bbColor(board, C_EMPTY));
 }
 
+// bBoard 
+
 #endif /* end of include guard: BOARD_H */
