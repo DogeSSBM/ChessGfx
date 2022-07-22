@@ -16,15 +16,7 @@ mCoord aBoardMpos(const uint scale)
     return (const mCoord){0};
 }
 
-void aHighlight(const mCoord bpos, const pColor color, const uint scale)
-{
-    if(!bpos.valid)
-        return;
-    setColor(cColor[cInv(color)]);
-    fillBorderCoordSquare(coordMul(bpos.pos, scale), scale, -8);
-    setColor(cColor[color]);
-    fillBorderCoordSquare(coordOffset(coordMul(bpos.pos, scale), (const Coord){2,2}), scale-4, -4);
-}
+
 
 
 #endif /* end of include guard: ACTIVEPLAYER_H */

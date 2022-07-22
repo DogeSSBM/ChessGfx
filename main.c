@@ -47,10 +47,25 @@ int main(int argc, char **argv)
 
         if(active.mbpos.valid){
             if(pAt(board, active.mbpos.pos).color == active.color){
-                aHighlight(active.mbpos, active.color, board.scale);
+                setColor(cColor[cInv(active.color)]);
+                fillBorderCoordSquare(
+                    coordMul(active.mbpos.pos, board.scale),
+                    board.scale,
+                    -8
+                );
+                setColor(cColor[active.color]);
+                fillBorderCoordSquare(
+                    coordOffset(coordMul(active.mbpos.pos, board.scale),(const Coord){2,2}),
+                    board.scale - 4,
+                    -4
+                );
             }else{
                 setColor(GREY);
-                fillBorderCoordSquare(coordMul(active.mbpos.pos, board.scale), board.scale, -8);
+                fillBorderCoordSquare(
+                    coordMul(active.mbpos.pos, board.scale),
+                    board.scale,
+                    -8
+                );
             }
         }
 
