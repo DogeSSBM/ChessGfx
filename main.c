@@ -32,13 +32,17 @@ int main(int argc, char **argv)
             downAt = active.mbpos;
         }
 
-        if(mouseBtnReleased(MOUSE_L){
+        if(mouseBtnReleased(MOUSE_L)){
             upAt = active.mbpos;
-            if(downAt.valid && upAt.valid && downAt.pos == upAt.pos){
-            const Piece p = pAt(board, active.mbpos);
-            if(p.color)
+            if(
+                downAt.valid && upAt.valid && coordSame(downAt.pos, upAt.pos) &&
+                pAt(board, active.mbpos.pos).color == active.color
+            ){
+                active.msrc = active.mbpos;
+            }else{
+                active.msrc = (const mCoord){0};
             }
-            downAt = {0};
+            downAt = (const mCoord){0};
         }
 
         if(active.mbpos.valid){
@@ -50,7 +54,12 @@ int main(int argc, char **argv)
             }
         }
 
-        if(active.mbpos.valid && active.msrc.valid && active.mdst.valid){
+        if(active.msrc.valid){
+            setColor(GREEN);
+            fillBorderCoordSquare(coordMul(active.msrc.pos, board.scale), board.scale, -8);
+        }
+
+        if(active.msrc.valid && active.mdst.valid){
             Turn *t = tNew(active.color);
             // const Move m = {.src = pAt(board, active.msrc.pos), .dst = pAt(board, active.mdst.pos)};
             const Piece srcp = pAt(board, active.msrc.pos);
