@@ -34,4 +34,34 @@ Board pClear(Board board, const Coord pos)
     return board;
 }
 
+bBoard pMoves(const bBoard pieces, const Piece p, const Coord pos)
+{
+    bBoard ret = {0};
+    switch(p.type){
+        case T_KING:
+
+            break;
+        case T_QUEEN:
+
+            break;
+        case T_KNIGHT:
+
+            break;
+        case T_BISHOP:
+
+            break;
+        case T_ROOK:
+
+            break;
+        case T_PAWN:
+
+            break;
+        case T_EMPTY:
+        default:
+
+            break;
+    }
+    return ret;
+}
+
 #endif /* end of include guard: PIECE_H */

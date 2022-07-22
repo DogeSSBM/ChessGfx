@@ -52,9 +52,8 @@ typedef struct{
 }Board;
 
 typedef struct{
-    Coord src;
-    Coord dst;
-}Move;
+    bool b[8][8];
+}bBoard;
 
 typedef enum{M_INVALID, M_MOVE, M_CAPTURE, M_CASTLE, M_PROMOTE, M_P_CHARGE, M_P_PASSANT}mType;
 

@@ -70,4 +70,42 @@ bool bCoordValid(const Coord pos)
     return coordMin(pos) >= 0 && coordMax(pos) < 8;
 }
 
+bBoard bbOr(const bBoard a, const bBoard b)
+{
+    bBoard ret = {0};
+    for(uint y = 0; y < 8; y++){
+        for(uint x = 0; x < 8; x++){
+            ret.b[x][y] = a.b[x][y] || b.b[x][y];
+        }
+    }
+    return ret;
+}
+
+bBoard bbInv(const bBoard a)
+{
+    bBoard ret = {0};
+    for(uint y = 0; y < 8; y++){
+        for(uint x = 0; x < 8; x++){
+            ret.b[x][y] = !a.b[x][y];
+        }
+    }
+    return ret;
+}
+
+bBoard bbColor(const Board board, const pColor color)
+{
+    bBoard ret = {0};
+    for(uint y = 0; y < 8; y++){
+        for(uint x = 0; x < 8; x++){
+            ret.b[x][y] = board.arr[x][y].color == color;
+        }
+    }
+    return ret;
+}
+
+bBoard bbPieces(const Board board)
+{
+    return bbInv(bbColor(board, C_EMPTY));
+}
+
 #endif /* end of include guard: BOARD_H */

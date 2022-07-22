@@ -34,7 +34,6 @@ int main(int argc, char **argv)
 
         if(active.msrc.valid && active.mdst.valid){
             Turn *t = tNew(active.color);
-            // const Move m = {.src = pAt(board, active.msrc.pos), .dst = pAt(board, active.mdst.pos)};
             const Piece srcp = pAt(board, active.msrc.pos);
             const Piece dstp = pAt(board, active.mdst.pos);
             if(dstp.color){
