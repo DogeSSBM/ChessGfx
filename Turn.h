@@ -32,4 +32,18 @@ Turn *tLast(Turn *const head)
     return cur;
 }
 
+void tFree(Turn *const head)
+{
+    if(!head)
+        return;
+    Turn *cur = head;
+    while(cur->next)
+    {
+        Turn *next = cur->next;
+        free(cur);
+        cur = next;
+    }
+    free(cur);
+}
+
 #endif /* end of include guard: TURN_H */
