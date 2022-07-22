@@ -48,7 +48,7 @@ void aHighlight(const Board board, const ActivePlayer active)
     }
 }
 
-ActivePlayer aMbtn(ActivePlayer active)
+ActivePlayer aMbtn(const Board board, ActivePlayer active)
 {
     active.mbpos = aBoardMpos(board.scale);
     if(mouseBtnPressed(MOUSE_L)){

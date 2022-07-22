@@ -27,7 +27,7 @@ int main(int argc, char **argv)
         bDraw(board);
 
         if(mouseBtnChanged(MOUSE_L))
-            active = aMbtn(active);
+            active = aMbtn(board, active);
 
 
 
