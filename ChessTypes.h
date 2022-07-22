@@ -6,7 +6,7 @@ typedef enum{C_EMPTY, C_WHITE, C_BLACK}pColor;
 
 pColor cInv(const pColor color){
     if(color == C_EMPTY)
-        return color
+        return color;
     return color == C_WHITE ? C_BLACK : C_WHITE;
 }
 

@@ -65,4 +65,9 @@ void bDraw(const Board board)
     }
 }
 
+bool bCoordValid(const Coord pos)
+{
+    return coordMin(pos) >= 0 && coordMax(pos) < 8;
+}
+
 #endif /* end of include guard: BOARD_H */
