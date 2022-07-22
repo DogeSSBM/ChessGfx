@@ -11,29 +11,70 @@ int main(int argc, char **argv)
     bPrint(board);
 
     Turn *turns = NULL;
+    mCoord downAt = {0};
+    mCoord upAt = {0};
 
+    ActivePlayer active = {.color = C_WHITE};
     while(1){
         const uint t = frameStart();
-
-        const Turn *lastTurn = tLast(turns);
-        const pColor activePlayer = lastTurn ? cInv(lastTurn->color) : C_WHITE;
-        board.scale = bRescale();
-        bDraw(board);
-
-        const Coord mbPos = coordDiv(mouse.pos, board.scale);
-        if(bCoordValid(mbPos) && pAt(board, mbPos).color == activePlayer){
-            setColor(activePlayer == C_WHITE ? BLACK : WHITE);
-            fillBorderCoordSquare(coordMul(mbPos, board.scale), board.scale, -8);
-            setColor(activePlayer == C_WHITE ? WHITE : BLACK);
-            fillBorderCoordSquare(coordOffset(coordMul(mbPos, board.scale), (const Coord){2,2}), board.scale-4, -4);
-        }
-
 
         if(
             (keyHeld(SDL_SCANCODE_RCTRL) || keyHeld(SDL_SCANCODE_LCTRL)) &&
             (keyPressed(SDL_SCANCODE_ESCAPE) || keyPressed(SDL_SCANCODE_Q))
         )
             return 0;
+
+        board.scale = bRescale();
+        bDraw(board);
+
+        active.mbpos = aBoardMpos(board.scale);
+        if(mouseBtnPressed(MOUSE_L)){
+            downAt = active.mbpos;
+        }
+
+        if(mouseBtnReleased(MOUSE_L){
+            upAt = active.mbpos;
+            if(downAt.valid && upAt.valid && downAt.pos == upAt.pos){
+            const Piece p = pAt(board, active.mbpos);
+            if(p.color)
+            }
+            downAt = {0};
+        }
+
+        if(active.mbpos.valid){
+            if(pAt(board, active.mbpos.pos).color == active.color){
+                aHighlight(active.mbpos, active.color, board.scale);
+            }else{
+                setColor(GREY);
+                fillBorderCoordSquare(coordMul(active.mbpos.pos, board.scale), board.scale, -8);
+            }
+        }
+
+        if(active.mbpos.valid && active.msrc.valid && active.mdst.valid){
+            Turn *t = tNew(active.color);
+            // const Move m = {.src = pAt(board, active.msrc.pos), .dst = pAt(board, active.mdst.pos)};
+            const Piece srcp = pAt(board, active.msrc.pos);
+            const Piece dstp = pAt(board, active.mdst.pos);
+            if(dstp.color){
+                t->type = M_CAPTURE;
+                t->capture.src = active.msrc.pos;
+                t->capture.dst = active.mdst.pos;
+                t->capture.moved = srcp;
+                t->capture.captured = dstp;
+            }else{
+                t->type = M_MOVE;
+                t->move.src = active.msrc.pos;
+                t->move.dst = active.mdst.pos;
+                t->move.moved = srcp;
+            }
+            turns = tAppend(turns, t);
+            board = pSet(board, active.mdst.pos, pAt(board, active.msrc.pos));
+            board = pClear(board, active.msrc.pos);
+            active.mbpos.valid = false;
+            active.msrc.valid = false;
+            active.mdst.valid = false;
+            active.color = cInv(active.color);
+        }
 
         frameEnd(t);
     }

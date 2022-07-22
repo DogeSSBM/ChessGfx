@@ -18,4 +18,20 @@ Piece pAt(const Board board, const Coord pos)
     return board.arr[pos.x][pos.y];
 }
 
+Board pSet(Board board, const Coord pos, const Piece p)
+{
+    if(coordMin(pos) < 0 || coordMax(pos) > 7)
+        panic("Cannot set piece at coord {%i,%i}\n", pos.x, pos.y);
+    board.arr[pos.x][pos.y] = p;
+    return board;
+}
+
+Board pClear(Board board, const Coord pos)
+{
+    if(coordMin(pos) < 0 || coordMax(pos) > 7)
+        panic("Cannot clear piece at coord {%i,%i}\n", pos.x, pos.y);
+    board.arr[pos.x][pos.y] = (const Piece){0};
+    return board;
+}
+
 #endif /* end of include guard: PIECE_H */

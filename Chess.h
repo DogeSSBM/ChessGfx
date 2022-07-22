@@ -7,5 +7,6 @@
 #include "Piece.h"
 #include "Board.h"
 #include "Turn.h"
+#include "ActivePlayer.h"
 
 #endif /* end of include guard: CHESS_H */
