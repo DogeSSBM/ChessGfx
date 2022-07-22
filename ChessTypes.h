@@ -106,6 +106,8 @@ typedef struct Turn{
 
 typedef struct{
     pColor color;
+    mCoord downAt;
+    mCoord upAt;
     mCoord mbpos;
     mCoord msrc;
     mCoord mdst;

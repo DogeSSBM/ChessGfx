@@ -48,5 +48,26 @@ void aHighlight(const Board board, const ActivePlayer active)
     }
 }
 
+ActivePlayer aMbtn(ActivePlayer active)
+{
+    active.mbpos = aBoardMpos(board.scale);
+    if(mouseBtnPressed(MOUSE_L)){
+        active.downAt = active.mbpos;
+    }
+
+    if(mouseBtnReleased(MOUSE_L)){
+        active.upAt = active.mbpos;
+        if(
+            active.downAt.valid && active.upAt.valid && coordSame(active.downAt.pos, active.upAt.pos) &&
+            pAt(board, active.mbpos.pos).color == active.color
+        ){
+            active.msrc = active.mbpos;
+        }else{
+            active.msrc = (const mCoord){0};
+        }
+        active.downAt = (const mCoord){0};
+    }
+    return active;
+}
 
 #endif /* end of include guard: ACTIVEPLAYER_H */

@@ -11,8 +11,7 @@ int main(int argc, char **argv)
     bPrint(board);
 
     Turn *turns = NULL;
-    mCoord downAt = {0};
-    mCoord upAt = {0};
+
 
     ActivePlayer active = {.color = C_WHITE};
     while(1){
@@ -27,25 +26,10 @@ int main(int argc, char **argv)
         board.scale = bRescale();
         bDraw(board);
 
-        active.mbpos = aBoardMpos(board.scale);
-        if(mouseBtnPressed(MOUSE_L)){
-            downAt = active.mbpos;
-        }
+        if(mouseBtnChanged(MOUSE_L))
+            active = aMbtn(active);
 
-        if(mouseBtnReleased(MOUSE_L)){
-            upAt = active.mbpos;
-            if(
-                downAt.valid && upAt.valid && coordSame(downAt.pos, upAt.pos) &&
-                pAt(board, active.mbpos.pos).color == active.color
-            ){
-                active.msrc = active.mbpos;
-            }else{
-                active.msrc = (const mCoord){0};
-            }
-            downAt = (const mCoord){0};
-        }
 
-        
 
         if(active.msrc.valid && active.mdst.valid){
             Turn *t = tNew(active.color);

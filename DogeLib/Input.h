@@ -74,6 +74,11 @@ bool mouseBtnReleased(const u32 mouseBtn)
 	return !(mouse.state&mouseBtn) && mouse.prev.state&mouseBtn;
 }
 
+bool mouseBtnChanged(const u32 mouseBtn)
+{
+    return mouse.state&mouseBtn != mouse.prev.state&mouseBtn;
+}
+
 bool mouseScrolled(const u32 mouseWheel)
 {
 	return mouse.wheel & mouseWheel;
