@@ -26,6 +26,7 @@ int main(int argc, char **argv)
         board.scale = bRescale();
         bDraw(board);
 
+        active.mbpos = aBoardMpos(board.scale);
         if(mouseBtnChanged(MOUSE_L))
             active = aMbtn(board, active);
 
