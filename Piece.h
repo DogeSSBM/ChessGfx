@@ -13,14 +13,14 @@ const char* pStr(const Piece p)
 
 Piece pAt(const Board board, const Coord pos)
 {
-    if(coordMin(pos) < 0 || coordMax(pos) > 7)
+    if(!bCoordValid(pos))
         panic("Cannot get piece at coord {%i,%i}\n", pos.x, pos.y);
     return board.arr[pos.x][pos.y];
 }
 
 Board pSet(Board board, const Coord pos, const Piece p)
 {
-    if(coordMin(pos) < 0 || coordMax(pos) > 7)
+    if(!bCoordValid(pos))
         panic("Cannot set piece at coord {%i,%i}\n", pos.x, pos.y);
     board.arr[pos.x][pos.y] = p;
     return board;
@@ -28,7 +28,7 @@ Board pSet(Board board, const Coord pos, const Piece p)
 
 Board pClear(Board board, const Coord pos)
 {
-    if(coordMin(pos) < 0 || coordMax(pos) > 7)
+    if(!bCoordValid(pos))
         panic("Cannot clear piece at coord {%i,%i}\n", pos.x, pos.y);
     board.arr[pos.x][pos.y] = (const Piece){0};
     return board;
@@ -39,7 +39,8 @@ bBoard pMoves(const bBoard pieces, const Piece p, const Coord pos)
     bBoard ret = {0};
     switch(p.type){
         case T_KING:
-
+            for(uint i = 0; i < 8; i++)
+                bbSet(ret, aMov())
             break;
         case T_QUEEN:
 
@@ -58,7 +59,7 @@ bBoard pMoves(const bBoard pieces, const Piece p, const Coord pos)
             break;
         case T_EMPTY:
         default:
-
+            panic("Cant pMoves unknown piece:%i\n", p);
             break;
     }
     return ret;

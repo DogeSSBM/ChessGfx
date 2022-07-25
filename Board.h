@@ -108,6 +108,33 @@ bBoard bbPieces(const Board board)
     return bbInv(bbColor(board, C_EMPTY));
 }
 
-// bBoard 
+bBoard bbSet(bBoard bb, const Coord pos)
+{
+
+}
+
+bool bbAt(const bBoard board, const Coord pos)
+{
+    if(!bCoordValid(pos))
+        panic("Cannot get b at coord {%i,%i}\n", pos.x, pos.y);
+    return board.b[pos.x][pos.y];
+}
+
+bBoard bbSet(bBoard board, const Coord pos, const bool b)
+{
+    if(!bCoordValid(pos))
+        panic("Cannot set b at coord {%i,%i}\n", pos.x, pos.y);
+    board.b[pos.x][pos.y] = b;
+    return board;
+}
+
+bBoard pClear(bBoard board, const Coord pos)
+{
+    if(!bCoordValid(pos))
+        panic("Cannot clear b at coord {%i,%i}\n", pos.x, pos.y);
+    board.b[pos.x][pos.y] = false;
+    return board;
+}
+
 
 #endif /* end of include guard: BOARD_H */

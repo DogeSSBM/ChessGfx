@@ -30,13 +30,54 @@ typedef struct{
 //            000   001   010   011   100   101   110   111
 typedef enum{A_UU, A_UR, A_RR, A_DR, A_DD, A_DL, A_LL, A_UL, A_END}Ang;
 const char *const AngStr[8] = {"A_UU", "A_UR", "A_RR", "A_DR", "A_DD", "A_DL", "A_LL", "A_UL"};
+
+Coord aOff(const Ang a)
+{
+    switch(a){
+        case A_UU:
+            return (const Coord){.y = 1};
+            break;
+        case A_UR:
+            return (const Coord){.x = 1, .y = 1};
+            break;
+        case A_RR:
+            return (const Coord){.x = 1};
+            break;
+        case A_DR:
+            return (const Coord){.x = 1, .y = -1};
+            break;
+        case A_DD:
+            return (const Coord){.y = -1};
+            break;
+        case A_DL:
+            return (const Coord){.x = -1, .y = -1};
+            break;
+        case A_LL:
+            return (const Coord){.x = -1};
+            break;
+        case A_UL:
+            return (const Coord){.x = -1, .y = 1};
+            break;
+        default:
+            break;
+    }
+    panic("Invalid Ang:%i\n", a);
+    return return (const Coord){0};
+}
+
 Ang aInv(const Ang a)
 {
     return a^0b100;
 }
 
-Ang aRoi(const Ang a, const int i){
+Ang aRoi(const Ang a, const int i)
+{
     return a+i < 0 ? A_END - (iabs(i)%A_END) : (a+i)%A_END;
+}
+
+Coord aMov(const Coord pos, const Ang a, const int i)
+{
+    return coordOffset(pos, coordMul(aOff(a), i));
 }
 
 typedef enum{T_EMPTY, T_KING, T_QUEEN, T_KNIGHT, T_BISHOP, T_ROOK, T_PAWN}pType;
