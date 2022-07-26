@@ -42,6 +42,4 @@ void tFree(Turn *const head)
     free(cur);
 }
 
-
-
 #endif /* end of include guard: TURN_H */

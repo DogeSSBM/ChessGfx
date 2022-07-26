@@ -35,34 +35,35 @@ Coord aOff(const Ang a)
 {
     switch(a){
         case A_UU:
-            return (const Coord){.y = 1};
+            return (const Coord){.y = -1};
             break;
         case A_UR:
-            return (const Coord){.x = 1, .y = 1};
+            return (const Coord){.x = 1, .y = -1};
             break;
         case A_RR:
             return (const Coord){.x = 1};
             break;
         case A_DR:
-            return (const Coord){.x = 1, .y = -1};
+            return (const Coord){.x = 1, .y = 1};
             break;
         case A_DD:
-            return (const Coord){.y = -1};
+            return (const Coord){.y = 1};
             break;
         case A_DL:
-            return (const Coord){.x = -1, .y = -1};
+            return (const Coord){.x = -1, .y = 1};
             break;
         case A_LL:
             return (const Coord){.x = -1};
             break;
         case A_UL:
-            return (const Coord){.x = -1, .y = 1};
+            return (const Coord){.x = -1, .y = -1};
             break;
         default:
             break;
     }
-    panic("Invalid Ang:%i\n", a);
-    return return (const Coord){0};
+    printf("Invalid Ang:%i\n", a);
+    exit(EXIT_FAILURE);
+    return (const Coord){0};
 }
 
 Ang aInv(const Ang a)
@@ -80,7 +81,7 @@ Coord aMov(const Coord pos, const Ang a, const int i)
     return coordOffset(pos, coordMul(aOff(a), i));
 }
 
-typedef enum{T_EMPTY, T_KING, T_QUEEN, T_KNIGHT, T_BISHOP, T_ROOK, T_PAWN}pType;
+typedef enum{T_EMPTY, T_QUEEN, T_KING, T_KNIGHT, T_BISHOP, T_ROOK, T_PAWN}pType;
 typedef enum{C_EMPTY, C_WHITE, C_BLACK}pColor;
 const Color cColor[3] = {(const Color){0}, WHITE, BLACK};
 
@@ -93,7 +94,6 @@ pColor cInv(const pColor color){
 typedef struct{
     pColor color;
     pType type;
-
 }Piece;
 
 typedef struct{

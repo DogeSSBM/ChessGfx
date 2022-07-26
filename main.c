@@ -20,6 +20,23 @@ int main(int argc, char **argv)
         b = aRoi(b, -3);
     }
 
+    board.arr[0][6] = (const Piece){0};
+    board.arr[1][6] = (const Piece){0};
+    board.arr[2][6] = (const Piece){0};
+    board.arr[3][6] = (const Piece){0};
+    board.arr[4][6] = (const Piece){0};
+    board.arr[6][6] = (const Piece){0};
+    board.arr[7][6] = (const Piece){0};
+
+    board.arr[3][7] = (const Piece){0};
+    board.arr[3][4] = (const Piece){.color = C_WHITE, .type = T_QUEEN};
+
+    board.arr[0][7] = (const Piece){0};
+    board.arr[0][5] = (const Piece){.color = C_WHITE, .type = T_ROOK};
+
+    board.arr[6][2] = (const Piece){.color = C_WHITE, .type = T_PAWN};
+    board.arr[7][4] = (const Piece){.color = C_WHITE, .type = T_PAWN};
+
     ActivePlayer active = {.color = C_WHITE};
     while(1){
         const uint t = frameStart();

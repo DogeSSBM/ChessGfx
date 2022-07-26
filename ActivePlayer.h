@@ -16,6 +16,24 @@ mCoord aBoardMpos(const uint scale)
     return (const mCoord){0};
 }
 
+void aCircle(const Coord pos, const uint scale)
+{
+    drawCircleCoord(
+        coordOffset(
+            coordMul(pos, scale),
+            coordDiv(iC(scale, scale), 2)
+        ),
+        scale / 2
+    );
+    drawCircleCoord(
+        coordOffset(
+            coordMul(pos, scale),
+            coordDiv(iC(scale, scale), 2)
+        ),
+        (scale / 2)-1
+    );
+}
+
 void aHighlight(const Board board, const ActivePlayer active)
 {
     if(active.mbpos.valid){
@@ -45,6 +63,43 @@ void aHighlight(const Board board, const ActivePlayer active)
     if(active.msrc.valid){
         setColor(GREEN);
         fillBorderCoordSquare(coordMul(active.msrc.pos, board.scale), board.scale, -8);
+
+        const bBoard pcs = bbPieces(board);
+
+        const bBoard threat = bbRem(
+            pThreat(
+                pcs, pAt(board, active.msrc.pos), active.msrc.pos
+            ),
+            bbColor(board, active.color)
+        );
+
+        const bBoard atk = bbRem(
+            threat,
+            bbInv(pcs)
+        );
+
+        const bBoard move = pMove(pcs, pAt(board, active.msrc.pos), active.msrc.pos);
+
+        for(uint y = 0; y < 8; y++){
+            for(uint x = 0; x < 8; x++){
+                const Coord pos = iC(x,y);
+
+                if(bbAt(threat, pos)){
+                    setColor(GREY);
+                    aCircle(pos, board.scale);
+                }
+
+                if(bbAt(move, pos)){
+                    setColor(BLUE);
+                    aCircle(pos, board.scale);
+                }
+
+                if(bbAt(atk, pos)){
+                    setColor(RED);
+                    aCircle(pos, board.scale);
+                }
+            }
+        }
     }
 }
 

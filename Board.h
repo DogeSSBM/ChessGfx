@@ -19,9 +19,10 @@ Board bNew(void)
 
     for(uint i = 0; i < 8; i++){
         ret.arr[i][0] = (const Piece){.color = C_BLACK, .type = home[i]};
-        ret.arr[i][7] = (const Piece){.color = C_WHITE, .type = home[i]};
         ret.arr[i][1] = (const Piece){.color = C_BLACK, .type = T_PAWN};
+
         ret.arr[i][6] = (const Piece){.color = C_WHITE, .type = T_PAWN};
+        ret.arr[i][7] = (const Piece){.color = C_WHITE, .type = home[i]};
     }
 
     return ret;
@@ -81,6 +82,17 @@ bBoard bbOr(const bBoard a, const bBoard b)
     return ret;
 }
 
+bBoard bbRem(bBoard board, const bBoard rem)
+{
+    for(uint y = 0; y < 8; y++){
+        for(uint x = 0; x < 8; x++){
+            if(rem.b[x][y])
+                board.b[x][y] = false;
+        }
+    }
+    return board;
+}
+
 bBoard bbInv(const bBoard a)
 {
     bBoard ret = {0};
@@ -108,11 +120,6 @@ bBoard bbPieces(const Board board)
     return bbInv(bbColor(board, C_EMPTY));
 }
 
-bBoard bbSet(bBoard bb, const Coord pos)
-{
-
-}
-
 bool bbAt(const bBoard board, const Coord pos)
 {
     if(!bCoordValid(pos))
@@ -128,13 +135,18 @@ bBoard bbSet(bBoard board, const Coord pos, const bool b)
     return board;
 }
 
-bBoard pClear(bBoard board, const Coord pos)
+bBoard bbCast(const bBoard pieces, const Coord pos, const Ang a, const uint len)
 {
-    if(!bCoordValid(pos))
-        panic("Cannot clear b at coord {%i,%i}\n", pos.x, pos.y);
-    board.b[pos.x][pos.y] = false;
-    return board;
+    bBoard ret = {0};
+    for(uint i = 1; i <= (len ? len : 7); i++){
+        const Coord at = aMov(pos, a, i);
+        if(!bCoordValid(at))
+            return ret;
+        ret = bbSet(ret, at, true);
+        if(bbAt(pieces, at))
+            return ret;
+    }
+    return ret;
 }
-
 
 #endif /* end of include guard: BOARD_H */
