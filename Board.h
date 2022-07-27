@@ -40,6 +40,18 @@ void bPrint(const Board board)
     printf("+---+---+---+---+---+---+---+---+\n");
 }
 
+void bbPrint(const bBoard board)
+{
+    for(uint y = 0; y < 8; y++){
+        printf("+---+---+---+---+---+---+---+---+\n|");
+        for(uint x = 0; x < 8; x++){
+            printf(" %c |", bbAt(board, iC(x,y)) ? 'X' : ' ');
+        }
+        printf("\n");
+    }
+    printf("+---+---+---+---+---+---+---+---+\n");
+}
+
 void bDraw(const Board board)
 {
     setColor(board.whiteSquare);
@@ -69,6 +81,26 @@ void bDraw(const Board board)
 bool bCoordValid(const Coord pos)
 {
     return coordMin(pos) >= 0 && coordMax(pos) < 8;
+}
+
+void bInfluences(Board *board)
+{
+    const bBoard pcs = bbPieces(*board);
+    const bBoard blk = bbColor(*board, C_BLACK);
+    const bBoard wte = bbColor(*board, C_WHITE);
+
+    for(uint y = 0; y < 8; y++){
+        for(uint x = 0; x < 8; x++){
+            const Coord pos = iC(x,y);
+            if(!bbAt(pcs, pos))
+                continue;
+
+            const Piece p = pAt(*board, pos);
+            board->threat[x][y] = pThreat(pcs, p.color == C_WHITE ? wte : blk, p, pos);
+            board->attack[x][y] = bbRem(board->threat[x][y], bbInv(pcs));
+            board->move[x][y] = pMove(pcs, p, pos);
+        }
+    }
 }
 
 bBoard bbOr(const bBoard a, const bBoard b)
@@ -148,5 +180,7 @@ bBoard bbCast(const bBoard pieces, const Coord pos, const Ang a, const uint len)
     }
     return ret;
 }
+
+
 
 #endif /* end of include guard: BOARD_H */

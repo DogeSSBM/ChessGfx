@@ -83,6 +83,7 @@ Coord aMov(const Coord pos, const Ang a, const int i)
 
 typedef enum{T_EMPTY, T_QUEEN, T_KING, T_KNIGHT, T_BISHOP, T_ROOK, T_PAWN}pType;
 typedef enum{C_EMPTY, C_WHITE, C_BLACK}pColor;
+const char *const pColorStr[3] = {"C_EMPTY", "C_WHITE", "C_BLACK"};
 const Color cColor[3] = {(const Color){0}, WHITE, BLACK};
 
 pColor cInv(const pColor color){
@@ -92,21 +93,24 @@ pColor cInv(const pColor color){
 }
 
 typedef struct{
+    bool b[8][8];
+}bBoard;
+
+typedef struct{
     pColor color;
     pType type;
 }Piece;
 
 typedef struct{
+    bBoard move[8][8];
+    bBoard threat[8][8];
+    bBoard attack[8][8];
     Color whiteSquare;
     Color blackSquare;
     uint scale;
     SDL_Texture *pieces;
     Piece arr[8][8];
 }Board;
-
-typedef struct{
-    bool b[8][8];
-}bBoard;
 
 typedef enum{M_INVALID, M_MOVE, M_CAPTURE, M_CASTLE, M_PROMOTE, M_P_CHARGE, M_P_PASSANT}mType;
 
@@ -163,6 +167,7 @@ typedef struct{
     mCoord mbpos;
     mCoord msrc;
     mCoord mdst;
+    bool endTurn;
 }ActivePlayer;
 
 #endif /* end of include guard: CHESSTYPES_H */

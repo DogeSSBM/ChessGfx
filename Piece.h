@@ -26,25 +26,17 @@ Board pSet(Board board, const Coord pos, const Piece p)
     return board;
 }
 
-Board pClear(Board board, const Coord pos)
-{
-    if(!bCoordValid(pos))
-        panic("Cannot clear piece at coord {%i,%i}\n", pos.x, pos.y);
-    board.arr[pos.x][pos.y] = (const Piece){0};
-    return board;
-}
-
-bBoard pThreat(const bBoard pieces, const Piece p, const Coord pos)
+bBoard pThreat(const bBoard pcs, const bBoard friends, const Piece p, const Coord pos)
 {
     bBoard ret = {0};
     switch(p.type){
         case T_KING:
             for(uint i = 0; i < 8; i++)
-                ret = bbOr(ret, bbCast(pieces, pos, i, 1));
+                ret = bbOr(ret, bbCast(pcs, pos, i, 1));
             break;
         case T_QUEEN:
             for(uint i = 0; i < 8; i++)
-                ret = bbOr(ret, bbCast(pieces, pos, i, 0));
+                ret = bbOr(ret, bbCast(pcs, pos, i, 0));
             break;
         case T_KNIGHT:
             for(uint i = 0; i < 8; i+=2){
@@ -69,11 +61,11 @@ bBoard pThreat(const bBoard pieces, const Piece p, const Coord pos)
             break;
         case T_BISHOP:
             for(uint i = 1; i < 8; i+=2)
-                ret = bbOr(ret, bbCast(pieces, pos, i, 0));
+                ret = bbOr(ret, bbCast(pcs, pos, i, 0));
             break;
         case T_ROOK:
             for(uint i = 0; i < 8; i+=2)
-                ret = bbOr(ret, bbCast(pieces, pos, i, 0));
+                ret = bbOr(ret, bbCast(pcs, pos, i, 0));
             break;
         case T_PAWN:
             ;
@@ -91,7 +83,7 @@ bBoard pThreat(const bBoard pieces, const Piece p, const Coord pos)
             break;
     }
 
-    return ret;
+    return bbRem(ret, friends);
 }
 
 bBoard pMove(const bBoard pieces, const Piece p, const Coord pos)
@@ -138,7 +130,7 @@ bBoard pMove(const bBoard pieces, const Piece p, const Coord pos)
         case T_PAWN:
             ;
             const Coord m1 = aMov(pos, p.color == C_BLACK ? A_DD : A_UU, 1);
-            if(bCoordValid(m1)){
+            if(bCoordValid(m1) && !bbAt(pieces, m1)){
                 ret = bbSet(ret, m1, true);
                 if(pos.y == (p.color == C_BLACK ? 1 : 6)){
                     const Coord m2 = aMov(pos, p.color == C_BLACK ? A_DD : A_UU, 2);

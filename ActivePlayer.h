@@ -64,39 +64,37 @@ void aHighlight(const Board board, const ActivePlayer active)
         setColor(GREEN);
         fillBorderCoordSquare(coordMul(active.msrc.pos, board.scale), board.scale, -8);
 
-        const bBoard pcs = bbPieces(board);
+        // const bBoard pcs = bbPieces(board);
+        // const bBoard threat = bbRem(
+        //     pThreat(
+        //         pcs, pAt(board, active.msrc.pos), active.msrc.pos
+        //     ),
+        //     bbColor(board, active.color)
+        // );
+        // const bBoard atk = bbRem(
+        //     threat,
+        //     bbInv(pcs)
+        // );
+        // const bBoard move = pMove(pcs, pAt(board, active.msrc.pos), active.msrc.pos);
 
-        const bBoard threat = bbRem(
-            pThreat(
-                pcs, pAt(board, active.msrc.pos), active.msrc.pos
-            ),
-            bbColor(board, active.color)
-        );
-
-        const bBoard atk = bbRem(
-            threat,
-            bbInv(pcs)
-        );
-
-        const bBoard move = pMove(pcs, pAt(board, active.msrc.pos), active.msrc.pos);
-
+        const Coord ppos = active.msrc.pos;
         for(uint y = 0; y < 8; y++){
             for(uint x = 0; x < 8; x++){
-                const Coord pos = iC(x,y);
+                const Coord bbpos = iC(x,y);
 
-                if(bbAt(threat, pos)){
+                if(bbAt(board.threat[ppos.x][ppos.y], bbpos)){
                     setColor(GREY);
-                    aCircle(pos, board.scale);
+                    aCircle(bbpos, board.scale);
                 }
 
-                if(bbAt(move, pos)){
+                if(bbAt(board.move[ppos.x][ppos.y], bbpos)){
                     setColor(BLUE);
-                    aCircle(pos, board.scale);
+                    aCircle(bbpos, board.scale);
                 }
 
-                if(bbAt(atk, pos)){
+                if(bbAt(board.attack[ppos.x][ppos.y], bbpos)){
                     setColor(RED);
-                    aCircle(pos, board.scale);
+                    aCircle(bbpos, board.scale);
                 }
             }
         }

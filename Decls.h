@@ -8,8 +8,7 @@ void panic( const char *, ... );
 const char* pStr(const Piece);
 Piece pAt(const Board, const Coord);
 Board pSet(Board, const Coord, const Piece);
-Board pClear(Board, const Coord);
-bBoard pThreat(const bBoard, const Piece, const Coord);
+bBoard pThreat(const bBoard, const bBoard, const Piece, const Coord);
 
 // BOARD_H
 uint bRescale(void);
