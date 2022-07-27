@@ -12,7 +12,7 @@ Board bNew(void)
         .whiteSquare = (const Color){.r=0xb9, .g=0xb9, .b=0xb9, .a=0xff},
         .blackSquare = (const Color){.r=0x3b, .g=0x3b, .b=0x3b, .a=0xff},
         .scale = bRescale(),
-        .pieces = loadTexture("./Pieces/piecesTransparent.png"),
+        .pieces = loadTexture("./piecesTransparent.png"),
         .arr = {0}
     };
     const pType home[8] = {T_ROOK, T_KNIGHT, T_BISHOP, T_QUEEN, T_KING, T_BISHOP, T_KNIGHT, T_ROOK};
