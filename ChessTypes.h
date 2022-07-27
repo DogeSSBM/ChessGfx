@@ -112,7 +112,7 @@ typedef struct{
     Piece arr[8][8];
 }Board;
 
-typedef enum{M_INVALID, M_MOVE, M_CAPTURE, M_CASTLE, M_PROMOTE, M_P_CHARGE, M_P_PASSANT}mType;
+typedef enum{M_MOVE, M_CAPTURE}mType;
 
 typedef struct Turn{
     mType type;
@@ -129,33 +129,6 @@ typedef struct Turn{
             Piece moved;
             Piece captured;
         }capture;
-        struct{
-            struct{
-                Coord src;
-                Coord dst;
-            }rook;
-            struct{
-                Coord src;
-                Coord dst;
-            }king;
-        }castle;
-        struct{
-            Coord src;
-            Coord dst;
-            Piece before;
-            Piece promoted;
-        }promote;
-        struct{
-            Coord src;
-            Coord dst;
-            Piece pawn;
-        }charge;
-        struct{
-            Coord src;
-            Coord dst;
-            Piece moved;
-            Piece captured;
-        }passant;
     };
     struct Turn *next;
 }Turn;

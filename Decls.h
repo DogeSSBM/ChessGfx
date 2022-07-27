@@ -36,5 +36,8 @@ mCoord aMouseMpos(const uint);
 mCoord aBoardMpos(const uint);
 void aHighlight(const Board, const ActivePlayer);
 ActivePlayer aMbtn(const Board, ActivePlayer);
+ActivePlayer aClick(const Board, ActivePlayer);
+bool aValidClick(const ActivePlayer);
+ActivePlayer aUpdateMouse(ActivePlayer, const Board);
 
 #endif /* end of include guard: DECLS_H */

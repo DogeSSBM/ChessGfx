@@ -42,4 +42,24 @@ void tFree(Turn *const head)
     free(cur);
 }
 
+void tConstructBoard(Board *board, Turn *turns)
+{
+    *board = bNew();
+    board->scale = bRescale();
+    while(turns){
+        switch(turns->type){
+            case M_MOVE:
+                *board = pSet(*board, turns->move.src, (const Piece){0});
+                *board = pSet(*board, turns->move.dst, turns->move.moved);
+                break;
+            case M_CAPTURE:
+                *board = pSet(*board, turns->capture.src, (const Piece){0});
+                *board = pSet(*board, turns->capture.dst, turns->capture.moved);
+                break;
+        }
+        turns = turns->next;
+    }
+    bInfluences(board);
+}
+
 #endif /* end of include guard: TURN_H */

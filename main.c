@@ -7,36 +7,8 @@ int main(int argc, char **argv)
     init();
     setWindowLen(window);
 
-    Board board = bNew();
-    bPrint(board);
-
-    int a = 0;
-    int b = aInv(a);
-    for(int i = 0; i < 16; i++){
-        printf("%s\t%s\n", AngStr[a], AngStr[b]);
-        a = aRoi(a, 3);
-        b = aRoi(b, -3);
-    }
-
-    board.arr[0][6] = (const Piece){0};
-    board.arr[1][6] = (const Piece){0};
-    board.arr[2][6] = (const Piece){0};
-    board.arr[3][6] = (const Piece){0};
-    board.arr[4][6] = (const Piece){0};
-    board.arr[6][6] = (const Piece){0};
-    board.arr[7][6] = (const Piece){0};
-
-    board.arr[3][7] = (const Piece){0};
-    board.arr[3][4] = (const Piece){.color = C_WHITE, .type = T_QUEEN};
-
-    board.arr[0][7] = (const Piece){0};
-    board.arr[0][5] = (const Piece){.color = C_WHITE, .type = T_ROOK};
-
-    board.arr[6][2] = (const Piece){.color = C_WHITE, .type = T_PAWN};
-    board.arr[7][4] = (const Piece){.color = C_WHITE, .type = T_PAWN};
-
     ActivePlayer active = {.color = C_WHITE};
-    bInfluences(&board);
+    Turn *turns = NULL;
     while(1){
         const uint t = frameStart();
 
@@ -48,33 +20,38 @@ int main(int argc, char **argv)
             return 0;
         }
 
-        if(keyPressed(SDL_SCANCODE_SPACE)){
-            active.color = cInv(active.color);
-            printf("%s is now active player.\n", pColorStr[active.color]);
-        }
-
-        board.scale = bRescale();
+        Board board;
+        tConstructBoard(&board, turns);
         bDraw(board);
-
-        active.mbpos = aBoardMpos(board.scale);
-        if(mouseBtnPressed(MOUSE_L))
-            active.downAt = active.mbpos;
-        if(mouseBtnReleased(MOUSE_L)){
-            active.upAt = active.mbpos;
-            if(aValidClick(active))
-                active = aClick(board, active);
-        }
+        active = aUpdateMouse(active, board);
 
         if(active.mdst.valid){
-            const Piece p = pAt(board, active.msrc.pos);
-            board = pSet(board, active.msrc.pos, (const Piece){0});
-            board = pSet(board, active.mdst.pos, p);
+            Turn *t = tNew(active.color);
+            t->color = active.color;
+
+            const Coord srcpos = active.msrc.pos;
+            const Coord dstpos = active.mdst.pos;
+            const Piece srcpiece = pAt(board, active.msrc.pos);
+            const Piece dstpiece = pAt(board, active.mdst.pos);
+
+            if(dstpiece.color == cInv(active.color)){
+                t->type = M_CAPTURE;
+                t->capture.src = srcpos;
+                t->capture.dst = dstpos;
+                t->capture.moved = srcpiece;
+                t->capture.captured = dstpiece;
+            }else{
+                t->type = M_MOVE;
+                t->move.src = srcpos;
+                t->move.dst = dstpos;
+                t->move.moved = srcpiece;
+            }
+
+            turns = tAppend(turns, t);
             active.msrc.valid = false;
             active.mdst.valid = false;
             active.color = cInv(active.color);
-            bInfluences(&board);
         }
-
 
         aHighlight(board, active);
 

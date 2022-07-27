@@ -108,6 +108,20 @@ bool aValidClick(const ActivePlayer active)
     coordSame(active.downAt.pos, active.upAt.pos);
 }
 
+ActivePlayer aUpdateMouse(ActivePlayer active, const Board board)
+{
+    active.mbpos = aBoardMpos(board.scale);
+    if(mouseBtnPressed(MOUSE_L))
+        active.downAt = active.mbpos;
+    if(mouseBtnReleased(MOUSE_L)){
+        active.upAt = active.mbpos;
+        if(aValidClick(active))
+            active = aClick(board, active);
+    }
+
+    return active;
+}
+
 ActivePlayer aClick(const Board board, ActivePlayer active)
 {
     if(pAt(board, active.mbpos.pos).color == active.color){
