@@ -167,7 +167,6 @@ typedef struct{
     mCoord mbpos;
     mCoord msrc;
     mCoord mdst;
-    bool endTurn;
 }ActivePlayer;
 
 #endif /* end of include guard: CHESSTYPES_H */

@@ -35,7 +35,7 @@ int main(int argc, char **argv)
     board.arr[6][2] = (const Piece){.color = C_WHITE, .type = T_PAWN};
     board.arr[7][4] = (const Piece){.color = C_WHITE, .type = T_PAWN};
 
-    ActivePlayer active = {.color = C_WHITE, .endTurn = true};
+    ActivePlayer active = {.color = C_WHITE};
     bInfluences(&board);
     while(1){
         const uint t = frameStart();
@@ -57,8 +57,24 @@ int main(int argc, char **argv)
         bDraw(board);
 
         active.mbpos = aBoardMpos(board.scale);
-        if(mouseBtnChanged(MOUSE_L))
-            active = aMbtn(board, active);
+        if(mouseBtnPressed(MOUSE_L))
+            active.downAt = active.mbpos;
+        if(mouseBtnReleased(MOUSE_L)){
+            active.upAt = active.mbpos;
+            if(aValidClick(active))
+                active = aClick(board, active);
+        }
+
+        if(active.mdst.valid){
+            const Piece p = pAt(board, active.msrc.pos);
+            board = pSet(board, active.msrc.pos, (const Piece){0});
+            board = pSet(board, active.mdst.pos, p);
+            active.msrc.valid = false;
+            active.mdst.valid = false;
+            active.color = cInv(active.color);
+            bInfluences(&board);
+        }
+
 
         aHighlight(board, active);
 

@@ -101,24 +101,31 @@ void aHighlight(const Board board, const ActivePlayer active)
     }
 }
 
-ActivePlayer aMbtn(const Board board, ActivePlayer active)
+bool aValidClick(const ActivePlayer active)
 {
-    if(mouseBtnPressed(MOUSE_L)){
-        active.downAt = active.mbpos;
+    return active.downAt.valid &&
+    active.upAt.valid &&
+    coordSame(active.downAt.pos, active.upAt.pos);
+}
+
+ActivePlayer aClick(const Board board, ActivePlayer active)
+{
+    if(pAt(board, active.mbpos.pos).color == active.color){
+        active.msrc = active.mbpos;
+        active.mdst.valid = false;
+        return active;
     }
 
-    if(mouseBtnReleased(MOUSE_L)){
-        active.upAt = active.mbpos;
-        if(
-            active.downAt.valid && active.upAt.valid && coordSame(active.downAt.pos, active.upAt.pos) &&
-            pAt(board, active.mbpos.pos).color == active.color
-        ){
-            active.msrc = active.mbpos;
-        }else{
-            active.msrc = (const mCoord){0};
-        }
-        active.downAt = (const mCoord){0};
+    if(active.msrc.valid && (
+        bbAt(board.move[active.msrc.pos.x][active.msrc.pos.y], active.mbpos.pos) ||
+        bbAt(board.attack[active.msrc.pos.x][active.msrc.pos.y], active.mbpos.pos)
+    )){
+        active.mdst = active.mbpos;
+        return active;
     }
+
+    active.msrc.valid = false;
+    active.mdst.valid = false;
     return active;
 }
 
