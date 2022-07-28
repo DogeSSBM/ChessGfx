@@ -1,12 +1,25 @@
 #ifndef TURN_H
 #define TURN_H
 
-Turn *tNew(const pColor color)
+Turn *tNew(const Piece srcpiece, const Piece dstpiece, const Coord srcpos, const Coord dstpos)
 {
     Turn *t = calloc(1, sizeof(Turn));
     if(!t)
         panic("Failed to calloc turn!\n");
-    t->color = color;
+    t->color = srcpiece.color;
+    if(dstpiece.color == C_EMPTY){
+        t->type = M_MOVE;
+        t->move.src = srcpos;
+        t->move.dst = dstpos;
+        t->move.moved = srcpiece;
+    }else{
+        t->type = M_CAPTURE;
+        t->capture.src = srcpos;
+        t->capture.dst = dstpos;
+        t->capture.moved = srcpiece;
+        t->capture.captured = dstpiece;
+    }
+
     return t;
 }
 
@@ -42,23 +55,28 @@ void tFree(Turn *const head)
     free(cur);
 }
 
+Turn *applyTurn(Board *board, Turn *turns)
+{
+    if(!turns)
+        return NULL;
+    switch(turns->type){
+        case M_MOVE:
+            *board = pSet(*board, turns->move.src, (const Piece){0});
+            *board = pSet(*board, turns->move.dst, turns->move.moved);
+            break;
+        case M_CAPTURE:
+            *board = pSet(*board, turns->capture.src, (const Piece){0});
+            *board = pSet(*board, turns->capture.dst, turns->capture.moved);
+            break;
+    }
+    return turns->next;
+}
+
 void tConstructBoard(Board *board, Turn *turns)
 {
     *board = bNew();
     board->scale = bRescale();
-    while(turns){
-        switch(turns->type){
-            case M_MOVE:
-                *board = pSet(*board, turns->move.src, (const Piece){0});
-                *board = pSet(*board, turns->move.dst, turns->move.moved);
-                break;
-            case M_CAPTURE:
-                *board = pSet(*board, turns->capture.src, (const Piece){0});
-                *board = pSet(*board, turns->capture.dst, turns->capture.moved);
-                break;
-        }
-        turns = turns->next;
-    }
+    while((turns = applyTurn(board, turns)));
     bInfluences(board);
 }
 

@@ -103,6 +103,41 @@ void bInfluences(Board *board)
     }
 }
 
+Coord bKingPos(const Board board, const pColor color)
+{
+    if(color == C_EMPTY)
+        panic("There are no kings with color C_EMPTY o.0\n");
+
+    for(uint y = 0; y < 8; y++){
+        for(uint x = 0; x < 8; x++){
+            const Coord pos = iC(x,y);
+            const Piece p = pAt(board, pos);
+            if(p.type == T_KING && p.color == color)
+                return pos;
+        }
+    }
+    panic("I guess there was no %s king???\n", pColorStr[color]);
+    return (const Coord){0};
+}
+
+bool bCheck(const Board board, const pColor color)
+{
+    if(color == C_EMPTY)
+        panic("C_EMPTY can't be in check you dufas\n");
+
+    const Coord kingPos = bKingPos(board, color);
+    for(uint y = 0; y < 8; y++){
+        for(uint x = 0; x < 8; x++){
+            const Coord pos = iC(x,y);
+            const Piece p = pAt(board, pos);
+            if(p.color != C_EMPTY && board.threat[x][y].b[kingPos.x][kingPos.y])
+                return true;
+        }
+    }
+
+    return false;
+}
+
 bBoard bbOr(const bBoard a, const bBoard b)
 {
     bBoard ret = {0};
@@ -180,7 +215,5 @@ bBoard bbCast(const bBoard pieces, const Coord pos, const Ang a, const uint len)
     }
     return ret;
 }
-
-
 
 #endif /* end of include guard: BOARD_H */

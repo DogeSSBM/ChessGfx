@@ -26,7 +26,7 @@ bBoard bbSet(bBoard, const Coord, const bool);
 bBoard bbCast(const bBoard, const Coord, const Ang, const uint);
 
 // TURN_H
-Turn *tNew(const pColor);
+Turn *tNew(const Piece, const Piece, const Coord, const Coord);
 Turn *tLast(Turn *const);
 Turn *tAppend(Turn *const, Turn *const);
 void tFree(Turn *const);
