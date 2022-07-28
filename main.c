@@ -23,9 +23,8 @@ int main(int argc, char **argv)
         Board board;
         tConstructBoard(&board, turns);
         bDraw(board);
-        active = aUpdateMouse(active, board);
 
-        if(active.mdst.valid){
+        if(aValidClick((active = aUpdateMouse(active, board)))){
             Turn *t = tNew(
                 pAt(board, active.msrc.pos),
                 pAt(board, active.mdst.pos),
@@ -33,13 +32,7 @@ int main(int argc, char **argv)
                 active.mdst.pos
             );
 
-            Board after;
-            memcpy(&after, &board, sizeof(Board));
-            applyTurn(&after, t);
-            bInfluences(&after);
-            if(bCheck(after, active.color)){
-                free(t);
-            }else{
+            if(tValid(&board, t)){
                 turns = tAppend(turns, t);
                 active.color = cInv(active.color);
             }

@@ -55,29 +55,40 @@ void tFree(Turn *const head)
     free(cur);
 }
 
-Turn *applyTurn(Board *board, Turn *turns)
+Turn *applyTurn(Board *board, Turn *turn)
 {
-    if(!turns)
+    if(!turn)
         return NULL;
-    switch(turns->type){
+    switch(turn->type){
         case M_MOVE:
-            *board = pSet(*board, turns->move.src, (const Piece){0});
-            *board = pSet(*board, turns->move.dst, turns->move.moved);
+            *board = pSet(*board, turn->move.src, (const Piece){0});
+            *board = pSet(*board, turn->move.dst, turn->move.moved);
             break;
         case M_CAPTURE:
-            *board = pSet(*board, turns->capture.src, (const Piece){0});
-            *board = pSet(*board, turns->capture.dst, turns->capture.moved);
+            *board = pSet(*board, turn->capture.src, (const Piece){0});
+            *board = pSet(*board, turn->capture.dst, turn->capture.moved);
             break;
     }
-    return turns->next;
+    return turn->next;
 }
 
 void tConstructBoard(Board *board, Turn *turns)
 {
+    Turn *cur = turns;
     *board = bNew();
     board->scale = bRescale();
-    while((turns = applyTurn(board, turns)));
+    while((cur = applyTurn(board, cur)));
     bInfluences(board);
+}
+
+bool tValid(Board *const board, Turn *const turn)
+{
+    Board after;
+    memcpy(&after, board, sizeof(Board));
+    applyTurn(&after, turn);
+    bInfluences(&after);
+
+    return !bCheck(after, turn->color);
 }
 
 #endif /* end of include guard: TURN_H */

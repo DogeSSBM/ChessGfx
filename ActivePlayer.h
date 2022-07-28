@@ -103,9 +103,7 @@ void aHighlight(const Board board, const ActivePlayer active)
 
 bool aValidClick(const ActivePlayer active)
 {
-    return active.downAt.valid &&
-    active.upAt.valid &&
-    coordSame(active.downAt.pos, active.upAt.pos);
+    return active.mdst.valid;
 }
 
 ActivePlayer aUpdateMouse(ActivePlayer active, const Board board)
@@ -115,10 +113,14 @@ ActivePlayer aUpdateMouse(ActivePlayer active, const Board board)
         active.downAt = active.mbpos;
     if(mouseBtnReleased(MOUSE_L)){
         active.upAt = active.mbpos;
-        if(aValidClick(active))
+        if(
+            active.downAt.valid &&
+            active.upAt.valid &&
+            coordSame(active.downAt.pos, active.upAt.pos)
+        ){
             active = aClick(board, active);
+        }
     }
-
     return active;
 }
 

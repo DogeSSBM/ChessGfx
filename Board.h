@@ -88,7 +88,6 @@ void bInfluences(Board *board)
     const bBoard pcs = bbPieces(*board);
     const bBoard blk = bbColor(*board, C_BLACK);
     const bBoard wte = bbColor(*board, C_WHITE);
-
     for(uint y = 0; y < 8; y++){
         for(uint x = 0; x < 8; x++){
             const Coord pos = iC(x,y);
