@@ -70,8 +70,17 @@ void bDraw(const Board board)
                 SDL_RenderCopy(
                     gfx.renderer,
                     board.pieces,
-                    &((const Rect){.x = 64*(p.type-1), p.color == C_WHITE ? 64 : 0, .w = 64, .h = 64}),
-                    &((const Rect){.x = wpos.x, .y = wpos.y, .w = board.scale, .h = board.scale})
+                    &((const Rect){
+                        .x = 64*(p.type-1), p.color == C_WHITE ? 64 : 0,
+                        .w = 64,
+                        .h = 64}
+                    ),
+                    &((const Rect){
+                        .x = wpos.x,
+                        .y = wpos.y,
+                        .w = board.scale,
+                        .h = board.scale}
+                    )
                 );
             }
         }
