@@ -1,12 +1,25 @@
 #ifndef TURN_H
 #define TURN_H
 
-Turn *tNew(const pColor color)
+Turn *tNew(const Piece srcpiece, const Piece dstpiece, const Coord srcpos, const Coord dstpos)
 {
     Turn *t = calloc(1, sizeof(Turn));
     if(!t)
         panic("Failed to calloc turn!\n");
-    t->color = color;
+    t->color = srcpiece.color;
+    if(dstpiece.color == C_EMPTY){
+        t->type = M_MOVE;
+        t->move.src = srcpos;
+        t->move.dst = dstpos;
+        t->move.moved = srcpiece;
+    }else{
+        t->type = M_CAPTURE;
+        t->capture.src = srcpos;
+        t->capture.dst = dstpos;
+        t->capture.moved = srcpiece;
+        t->capture.captured = dstpiece;
+    }
+
     return t;
 }
 
@@ -42,24 +55,40 @@ void tFree(Turn *const head)
     free(cur);
 }
 
+Turn *applyTurn(Board *board, Turn *turn)
+{
+    if(!turn)
+        return NULL;
+    switch(turn->type){
+        case M_MOVE:
+            *board = pSet(*board, turn->move.src, (const Piece){0});
+            *board = pSet(*board, turn->move.dst, turn->move.moved);
+            break;
+        case M_CAPTURE:
+            *board = pSet(*board, turn->capture.src, (const Piece){0});
+            *board = pSet(*board, turn->capture.dst, turn->capture.moved);
+            break;
+    }
+    return turn->next;
+}
+
 void tConstructBoard(Board *board, Turn *turns)
 {
+    Turn *cur = turns;
     *board = bNew();
     board->scale = bRescale();
-    while(turns){
-        switch(turns->type){
-            case M_MOVE:
-                *board = pSet(*board, turns->move.src, (const Piece){0});
-                *board = pSet(*board, turns->move.dst, turns->move.moved);
-                break;
-            case M_CAPTURE:
-                *board = pSet(*board, turns->capture.src, (const Piece){0});
-                *board = pSet(*board, turns->capture.dst, turns->capture.moved);
-                break;
-        }
-        turns = turns->next;
-    }
+    while((cur = applyTurn(board, cur)));
     bInfluences(board);
+}
+
+bool tValid(Board *const board, Turn *const turn)
+{
+    Board after;
+    memcpy(&after, board, sizeof(Board));
+    applyTurn(&after, turn);
+    bInfluences(&after);
+
+    return !bCheck(after, turn->color);
 }
 
 #endif /* end of include guard: TURN_H */

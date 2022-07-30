@@ -23,34 +23,21 @@ int main(int argc, char **argv)
         Board board;
         tConstructBoard(&board, turns);
         bDraw(board);
-        active = aUpdateMouse(active, board);
 
-        if(active.mdst.valid){
-            Turn *t = tNew(active.color);
-            t->color = active.color;
+        if(aValidClick((active = aUpdateMouse(active, board)))){
+            Turn *t = tNew(
+                pAt(board, active.msrc.pos),
+                pAt(board, active.mdst.pos),
+                active.msrc.pos,
+                active.mdst.pos
+            );
 
-            const Coord srcpos = active.msrc.pos;
-            const Coord dstpos = active.mdst.pos;
-            const Piece srcpiece = pAt(board, active.msrc.pos);
-            const Piece dstpiece = pAt(board, active.mdst.pos);
-
-            if(dstpiece.color == cInv(active.color)){
-                t->type = M_CAPTURE;
-                t->capture.src = srcpos;
-                t->capture.dst = dstpos;
-                t->capture.moved = srcpiece;
-                t->capture.captured = dstpiece;
-            }else{
-                t->type = M_MOVE;
-                t->move.src = srcpos;
-                t->move.dst = dstpos;
-                t->move.moved = srcpiece;
+            if(tValid(&board, t)){
+                turns = tAppend(turns, t);
+                active.color = cInv(active.color);
             }
-
-            turns = tAppend(turns, t);
             active.msrc.valid = false;
             active.mdst.valid = false;
-            active.color = cInv(active.color);
         }
 
         aHighlight(board, active);
