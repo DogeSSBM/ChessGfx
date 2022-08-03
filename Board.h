@@ -9,8 +9,6 @@ uint bRescale(void)
 Board bNew(void)
 {
     Board ret = {
-        .whiteSquare = (const Color){.r=0xb9, .g=0xb9, .b=0xb9, .a=0xff},
-        .blackSquare = (const Color){.r=0x3b, .g=0x3b, .b=0x3b, .a=0xff},
         .scale = bRescale(),
         .pieces = loadTexture("./piecesTransparent.png"),
         .arr = {0}
@@ -54,14 +52,14 @@ void bbPrint(const bBoard board)
 
 void bDraw(const Board board)
 {
-    setColor(board.whiteSquare);
+    setColor((const Color){.r=0xb9, .g=0xb9, .b=0xb9, .a=0xff});
     fillSquareCoord(iC(0,0), board.scale*8);
     for(uint y = 0; y < 8; y++){
         for(uint x = 0; x < 8; x++){
             const Coord bpos = iC(x,y);
             const Coord wpos = coordMul(bpos, board.scale);
             if((x+y)&1){
-                setColor(board.blackSquare);
+                setColor((const Color){.r=0x3b, .g=0x3b, .b=0x3b, .a=0xff});
                 fillSquareCoord(wpos, board.scale);
             }
 
