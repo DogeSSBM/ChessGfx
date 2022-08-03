@@ -34,6 +34,7 @@ void tFree(Turn *const);
 // ACTIVEPLAYER_H
 mCoord aMouseMpos(const uint);
 mCoord aBoardMpos(const uint);
+void aCircle(const Coord, const uint);
 void aHighlight(const Board, const ActivePlayer);
 ActivePlayer aMbtn(const Board, ActivePlayer);
 ActivePlayer aClick(const Board, ActivePlayer);

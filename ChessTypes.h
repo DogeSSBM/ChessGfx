@@ -61,7 +61,7 @@ Offset aOff(const Ang a)
         default:
             break;
     }
-    printf("Invalid Ang:%i\n", a);
+    fprintf(stderr, "Invalid Ang:%i\n", a);
     exit(EXIT_FAILURE);
     return (const Offset){0};
 }
@@ -94,6 +94,24 @@ pColor cInv(const pColor color){
     if(color == C_EMPTY)
         return color;
     return color == C_WHITE ? C_BLACK : C_WHITE;
+}
+
+Ang cFward(const pColor color)
+{
+    if(color == C_EMPTY){
+        fprintf(stderr, "C_EMPTY does not have a forward direction\n");
+        exit(EXIT_FAILURE);
+    }
+    return color ==  C_WHITE ? A_UU : A_DD;
+}
+
+Ang cBward(const pColor color)
+{
+    if(color == C_EMPTY){
+        fprintf(stderr, "C_EMPTY does not have a backward direction\n");
+        exit(EXIT_FAILURE);
+    }
+    return color ==  C_BLACK ? A_UU : A_DD;
 }
 
 typedef struct{
